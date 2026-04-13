@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Small vs Little — интерактивный рабочий лист</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f1f5f9;
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Inter', sans-serif;
+            margin: 0;
+            padding: 24px 20px;
+            color: #0f172a;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* карточки */
+        .card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.02);
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            transition: box-shadow 0.2s;
+        }
+
+        .guide-card {
+            background: linear-gradient(135deg, #fef9e3 0%, #fff7e6 100%);
+            border-left: 6px solid #fbbf24;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #1e293b, #2d3a4e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            border-left: 5px solid #3b82f6;
+            padding-left: 1rem;
+            color: #0f172a;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 1.5rem 0 1rem 0;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge {
+            background: #3b82f6;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 40px;
+        }
+
+        .grid-2 {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        .comparison-box {
+            flex: 1;
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 1rem 1.5rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .comparison-box h4 {
+            font-size: 1.3rem;
+            margin: 0 0 0.5rem;
+            font-weight: 600;
+        }
+
+        .small-head {
+            color: #0284c7;
+        }
+        .little-head {
+            color: #b45309;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 10px 12px;
+            text-align: left;
+            vertical-align: top;
+            background-color: white;
+        }
+        th {
+            background: #eef2ff;
+            font-weight: 600;
+        }
+
+        .question-item {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+            transition: all 0.1s;
+        }
+
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            color: #1e293b;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            align-items: center;
+        }
+
+        .option-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 6px 14px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: background 0.1s;
+            font-size: 0.9rem;
+        }
+        .option-label:hover {
+            background: #e2e8f0;
+        }
+        input[type="radio"] {
+            accent-color: #3b82f6;
+            width: 18px;
+            height: 18px;
+            margin: 0;
+        }
+
+        .feedback-icon {
+            margin-left: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .correct-feedback {
+            color: #15803d;
+        }
+        .wrong-feedback {
+            color: #b91c1c;
+        }
+
+        .score-area {
+            background: #eef2ff;
+            border-radius: 60px;
+            padding: 12px 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        button {
+            background: #1e293b;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-right: 16px;
+            margin-top: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        button:hover {
+            background: #0f172a;
+            transform: scale(0.98);
+        }
+        .reset-btn {
+            background: #475569;
+        }
+        .reset-btn:hover {
+            background: #334155;
+        }
+
+        hr {
+            margin: 1rem 0;
+            border-color: #e2e8f0;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #475569;
+            margin-top: 2rem;
+        }
+        @media (max-width: 700px) {
+            .card {
+                padding: 1.2rem;
+            }
+            .options {
+                gap: 0.8rem;
+            }
+            .option-label {
+                padding: 4px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card guide-card">
+        <h1>📘 small vs little: мир размеров и эмоций</h1>
+        <p><strong>Small</strong> — нейтральный, физический размер. <strong>Little</strong> — субъективное отношение, возраст, уют или пренебрежение.</p>
+        <div class="grid-2">
+            <div class="comparison-box">
+                <h4 class="small-head">📏 SMALL (факты, габариты)</h4>
+                <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>размер одежды, обуви</li>
+                    <li>площадь, объём, тираж</li>
+                    <li>нейтральная оценка: <em>a small problem</em></li>
+                    <li>степени сравнения: smaller, smallest</li>
+                </ul>
+            </div>
+            <div class="comparison-box">
+                <h4 class="little-head">💖 LITTLE (эмоции, возраст, количество)</h4>
+                <ul style="margin: 0; padding-left: 1.2rem;">
+                    <li>умиление: <em>a cute little house</em></li>
+                    <li>возраст: <em>my little brother</em></li>
+                    <li>неисчисляемое: <em>a little water</em></li>
+                    <li>устойчиво: <em>little by little</em></li>
+                </ul>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr><th>Ситуация</th><th>SMALL</th><th>LITTLE</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Дом</td><td>a small house (30 м²)</td><td>a little house (уютный)</td></tr>
+                <tr><td>Брат</td><td>a small brother (низкий рост)</td><td>a little brother (младший)</td></tr>
+                <tr><td>Проблема</td><td>a small problem (незначительная)</td><td>a little problem (сарказм/мягко)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="exercises-root"></div>
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-top: 0.5rem;">
+        <div>
+            <button id="checkAllBtn">✅ Проверить все ответы</button>
+            <button id="resetAllBtn" class="reset-btn">⟳ Сбросить всё</button>
+        </div>
+        <div id="globalScoreDisplay" class="score-area">⭐ Результат: 0 / 0</div>
+    </div>
+    <footer>Интерактивный рабочий лист · Выберите вариант и проверьте себя · Основано на правилах Small vs Little</footer>
+</div>
+
+<script>
+    // --------------------------------------------------------------
+    // 1. Упражнение 1: Small vs Little (факты / эмоции)
+    const exercise1Data = [
+        { text: "I have a ______ sister; she is five years old.", correct: "little" },
+        { text: "This room is too ______ for ten people.", correct: "small" },
+        { text: "Look at that ______ bird in the nest! It's so sweet.", correct: "little" },
+        { text: "He lives in a ______ apartment in the city center.", correct: "small" },
+        { text: "Don't worry, it's just a ______ mistake.", correct: "small" },
+        { text: "The shirt I bought is a size too ______.", correct: "small" },
+        { text: "We stayed in a charming ______ hotel by the sea.", correct: "little" },
+        { text: "A ______ number of people attended the lecture.", correct: "small" },
+        { text: "I remember that ______ toy I had when I was a child.", correct: "little" },
+        { text: "My feet are very ________; I wear size 35.", correct: "small" }
+    ];
+
+    // 2. Упражнение 2: степени сравнения / грамматика
+    const exercise2Data = [
+        { text: "This is the ________ (small) box we have in the warehouse.", correct: "smallest", options: ["small", "smaller", "smallest", "more small"] },
+        { text: "My car is ________ (small) than yours.", correct: "smaller", options: ["small", "smaller", "more small", "most small"] },
+        { text: "There is ________ (little) milk left in the fridge.", correct: "little", options: ["little", "a little", "less", "small"] },
+        { text: "He knows ________ (little) about French history.", correct: "little", options: ["little", "few", "a little", "small"] },
+        { text: "I need a ________ (small) size, please.", correct: "smaller", options: ["small", "more small", "smaller", "littler"] },
+        { text: "She is the ________ (small) child in her class (height).", correct: "smallest", options: ["smallest", "littlest", "small", "more small"] },
+        { text: "Wait a ________ bit, I’m almost ready.", correct: "little", options: ["little", "small", "smaller", "less"] },
+        { text: "This ________ (small) laptop is perfect for travel.", correct: "small", options: ["small", "little", "smaller", "smallest"] },
+        { text: "Is there any ________ (small) option available?", correct: "smaller", options: ["small", "smaller", "more small", "littler"] },
+        { text: "We have ________ (little) time to finish the project.", correct: "little", options: ["little", "a little", "less", "small"] }
+    ];
+
+    // 3. Упражнение 3: Перевод на английский (FOCUS: SMALL)
+    const exercise3Data = [
+        { rus: "Нам нужен стол поменьше.", correct: "We need a smaller table.", options: ["We need a smaller table.", "We need a more small table.", "We need a little table.", "We need a small table."] },
+        { rus: "Это маленькая компания, в ней всего 5 сотрудников.", correct: "It’s a small company; it has only 5 employees.", options: ["It’s a small company; it has only 5 employees.", "It’s a little company, only 5 employees.", "It’s a small company, there is 5 workers.", "It’s a tiny company with 5."] },
+        { rus: "Его старая квартира была очень маленькой.", correct: "His old apartment was very small.", options: ["His old apartment was very small.", "His old flat was very little.", "His old apartment was too little.", "His old apartment was so little."] },
+        { rus: "Эта обувь слишком маленькая для меня.", correct: "These shoes are too small for me.", options: ["These shoes are too small for me.", "This shoe is too little for me.", "These shoes are too little for me.", "The shoes are very small for I."] },
+        { rus: "Самый маленький город в мире находится здесь.", correct: "The smallest town in the world is here.", options: ["The smallest town in the world is here.", "The littlest town in the world is here.", "The more small town is here.", "The most little town is here."] },
+        { rus: "У него маленькие руки.", correct: "He has small hands.", options: ["He has small hands.", "He has little hands.", "His hands are little.", "He has a small hand."] },
+        { rus: "Мы продаем маленькое количество товаров.", correct: "We sell a small quantity of goods.", options: ["We sell a small quantity of goods.", "We sell a little quantity of goods.", "We sell small amount of goods.", "We sell little goods."] },
+        { rus: "Эта кнопка слишком маленькая, я не могу на нее нажать.", correct: "This button is too small; I can't press it.", options: ["This button is too small; I can't press it.", "This button is too little, I can't press.", "This button is very small, can't press.", "The button is so little to press."] },
+        { rus: "У нее есть маленькая собака (фактический размер).", correct: "She has a small dog.", options: ["She has a small dog.", "She has a little dog.", "She has a tiny dog.", "Her dog is small-sized."] },
+        { rus: "Это был маленький шаг для человека.", correct: "It was a small step for a man.", options: ["It was a small step for a man.", "It was a little step for a man.", "That was a small step for mankind.", "It was a little step for human."] }
+    ];
+
+    // 4. Упражнение 4: Перевод (FOCUS: LITTLE)
+    const exercise4Data = [
+        { rus: "У меня есть маленькая (младшая) сестра.", correct: "I have a little sister.", options: ["I have a little sister.", "I have a small sister.", "My sister is little.", "I have a younger small sister."] },
+        { rus: "Посмотри на этот милый маленький цветок!", correct: "Look at this cute little flower!", options: ["Look at this cute little flower!", "Look at this pretty small flower!", "See this cute small flower!", "Look at this lovely little flower!"] },
+        { rus: "Когда я был маленьким, я любил молоко.", correct: "When I was little, I loved milk.", options: ["When I was little, I loved milk.", "When I was small, I loved milk.", "When I was a child little, I liked milk.", "As a little kid I loved milk."] },
+        { rus: "Это его маленькая грязная тайна.", correct: "It's his dirty little secret.", options: ["It's his dirty little secret.", "It's his small dirty secret.", "That's his little dirty secret.", "It is his dirty small secret."] },
+        { rus: "Она живет в уютном маленьком домике.", correct: "She lives in a cozy little house.", options: ["She lives in a cozy little house.", "She lives in a cozy small house.", "She lives in a little cozy house.", "She lives in a small cozy home."] },
+        { rus: "Дай мне немного времени.", correct: "Give me a little time.", options: ["Give me a little time.", "Give me small time.", "Give me a bit of small time.", "Give me a little of time."] },
+        { rus: "Мой младший брат выше меня.", correct: "My little brother is taller than me.", options: ["My little brother is taller than me.", "My small brother is taller than me.", "My younger little brother is taller.", "My little brother is more tall."] },
+        { rus: "Он — гадкий маленький человек (пренебрежение).", correct: "He is a nasty little man.", options: ["He is a nasty little man.", "He is a nasty small man.", "He is an awful little man.", "He is a disgusting small man."] },
+        { rus: "В этой бутылке мало воды.", correct: "There is little water in this bottle.", options: ["There is little water in this bottle.", "There is a little water in this bottle.", "There is small water in this bottle.", "There is few water in this bottle."] },
+        { rus: "Мало-помалу мы закончим работу.", correct: "Little by little we will finish.", options: ["Little by little we will finish.", "Small by small we will finish.", "Step by step little we finish.", "Little by little we'll complete."] }
+    ];
+
+    // 5. Упражнение 5: контекстный выбор (small/little/формы)
+    const exercise5Data = [
+        { text: "(Fact) The ant is a very ______ insect.", correct: "small", options: ["small", "little", "smaller", "littlest"] },
+        { text: "(Affection) I love my ______ kitten.", correct: "little", options: ["small", "little", "smaller", "littler"] },
+        { text: "(Size) Could I have a ______ glass?", correct: "smaller", options: ["smaller", "littler", "more small", "more little"] },
+        { text: "(Quantity) I have ______ interest in politics.", correct: "little", options: ["small", "little", "a little", "less"] },
+        { text: "(Age) My ______ brother is a doctor now.", correct: "little", options: ["small", "little", "young small", "littler"] },
+        { text: "(Scale) It was a ______ business back in 1990.", correct: "small", options: ["small", "little", "smaller", "littlest"] },
+        { text: "(Emotion) That ______ boy is so polite!", correct: "little", options: ["small", "little", "tiny", "smaller"] },
+        { text: "(Space) The car is too ______ for a family of five.", correct: "small", options: ["small", "little", "smaller", "littler"] },
+        { text: "(Detail) Focus on the ______ details of the contract.", correct: "small", options: ["small", "little", "smaller", "littlest"] },
+        { text: "(Opinion) He has a ______ mind (пренебрежительно).", correct: "little", options: ["small", "little", "smaller", "littler"] }
+    ];
+
+    // вспомогательная функция рендера радио-группы
+    function renderRadioGroup(qId, selectedValue, options, onChangeCallback) {
+        const div = document.createElement('div');
+        div.className = 'options';
+        options.forEach(opt => {
+            const label = document.createElement('label');
+            label.className = 'option-label';
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = qId;
+            radio.value = opt;
+            if (selectedValue === opt) radio.checked = true;
+            radio.addEventListener('change', (e) => {
+                if(e.target.checked) onChangeCallback(opt);
+            });
+            label.appendChild(radio);
+            label.appendChild(document.createTextNode(opt));
+            div.appendChild(label);
+        });
+        return div;
+    }
+
+    let allQuestions = []; // храним объекты: { domId, getSelected, setFeedback, correctAnswer, section, userAnswer }
+    let feedbackMap = new Map(); // для хранения элементов отображения статуса
+
+    function buildExercises() {
+        const root = document.getElementById('exercises-root');
+        root.innerHTML = '';
+        allQuestions = [];
+        feedbackMap.clear();
+
+        // Упражнение 1
+        const ex1Card = createSectionCard("Упражнение 1. Факты или эмоции? (small / little)", exercise1Data.map((item, idx) => ({ type: 'ex1', idx, data: item, correct: item.correct, options: ['small', 'little'] })));
+        // Упражнение 2
+        const ex2Card = createSectionCard("Упражнение 2. Степени сравнения и грамматика", exercise2Data.map((item, idx) => ({ type: 'ex2', idx, data: item, correct: item.correct, options: item.options, displayText: item.text })));
+        // Упражнение 3
+        const ex3Card = createSectionCard("Упражнение 3. Перевод на английский (small)", exercise3Data.map((item, idx) => ({ type: 'ex3', idx, data: item, correct: item.correct, options: item.options, displayRus: item.rus })));
+        // Упражнение 4
+        const ex4Card = createSectionCard("Упражнение 4. Перевод на английский (little)", exercise4Data.map((item, idx) => ({ type: 'ex4', idx, data: item, correct: item.correct, options: item.options, displayRus: item.rus })));
+        // Упражнение 5
+        const ex5Card = createSectionCard("Упражнение 5. Выберите верный вариант в контексте", exercise5Data.map((item, idx) => ({ type: 'ex5', idx, data: item, correct: item.correct, options: item.options, displayText: item.text })));
+
+        root.appendChild(ex1Card);
+        root.appendChild(ex2Card);
+        root.appendChild(ex3Card);
+        root.appendChild(ex4Card);
+        root.appendChild(ex5Card);
+    }
+
+    function createSectionCard(title, questionsMeta) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        const h3 = document.createElement('h3');
+        h3.innerHTML = `${title} <span class="badge">${questionsMeta.length} вопросов</span>`;
+        card.appendChild(h3);
+        
+        questionsMeta.forEach((qMeta, qIndex) => {
+            const qDiv = document.createElement('div');
+            qDiv.className = 'question-item';
+            const questionId = `${qMeta.type}_${qIndex}`;
+            
+            const textSpan = document.createElement('div');
+            textSpan.className = 'question-text';
+            if (qMeta.type === 'ex1') {
+                textSpan.innerText = qMeta.data.text;
+            } else if (qMeta.type === 'ex2') {
+                textSpan.innerText = qMeta.displayText;
+            } else if (qMeta.type === 'ex3' || qMeta.type === 'ex4') {
+                textSpan.innerHTML = `<span style="background:#f1f5f9; padding:2px 8px; border-radius:20px;">🇷🇺 ${qMeta.displayRus}</span> → выберите английский вариант`;
+            } else if (qMeta.type === 'ex5') {
+                textSpan.innerText = qMeta.displayText;
+            }
+            
+            qDiv.appendChild(textSpan);
+            
+            let currentSelected = null;
+            const feedbackSpan = document.createElement('span');
+            feedbackSpan.className = 'feedback-icon';
+            
+            const optionsContainer = document.createElement('div');
+            const updateSelection = (val) => {
+                currentSelected = val;
+                // обновить глобальное состояние ответа
+                const qObj = allQuestions.find(q => q.domId === questionId);
+                if (qObj) qObj.userAnswer = val;
+                // убираем старый фидбек при изменении
+                feedbackSpan.innerHTML = '';
+                feedbackSpan.className = 'feedback-icon';
+            };
+            
+            const radioGroup = renderRadioGroup(questionId, null, qMeta.options, updateSelection);
+            optionsContainer.appendChild(radioGroup);
+            optionsContainer.appendChild(feedbackSpan);
+            qDiv.appendChild(optionsContainer);
+            
+            card.appendChild(qDiv);
+            
+            // сохраняем метаинформацию
+            allQuestions.push({
+                domId: questionId,
+                getSelected: () => currentSelected,
+                setFeedback: (isCorrect, correctAnswerStr) => {
+                    if (isCorrect) {
+                        feedbackSpan.innerHTML = '✓ Верно';
+                        feedbackSpan.className = 'feedback-icon correct-feedback';
+                    } else {
+                        feedbackSpan.innerHTML = `✗ Неверно. Правильно: "${correctAnswerStr}"`;
+                        feedbackSpan.className = 'feedback-icon wrong-feedback';
+                    }
+                },
+                correctAnswer: qMeta.correct,
+                userAnswer: null,
+                reset: () => {
+                    currentSelected = null;
+                    const radios = document.querySelectorAll(`input[name="${questionId}"]`);
+                    radios.forEach(r => r.checked = false);
+                    feedbackSpan.innerHTML = '';
+                    feedbackSpan.className = 'feedback-icon';
+                }
+            });
+        });
+        return card;
+    }
+
+    function checkAll() {
+        let totalCorrect = 0;
+        let totalAnswered = 0;
+        allQuestions.forEach(q => {
+            const userVal = q.getSelected();
+            const isCorrect = (userVal && userVal === q.correctAnswer);
+            if (userVal !== undefined && userVal !== null) {
+                totalAnswered++;
+                if (isCorrect) totalCorrect++;
+                q.setFeedback(isCorrect, q.correctAnswer);
+            } else {
+                // нет ответа - показать подсказку
+                q.setFeedback(false, q.correctAnswer);
+            }
+        });
+        const totalQuestions = allQuestions.length;
+        const scoreSpan = document.getElementById('globalScoreDisplay');
+        scoreSpan.innerHTML = `⭐ Результат: ${totalCorrect} / ${totalQuestions} (${Math.round(totalCorrect/totalQuestions*100)}%)`;
+        if(totalCorrect === totalQuestions) scoreSpan.style.background = "#dcfce7";
+        else scoreSpan.style.background = "#eef2ff";
+    }
+
+    function resetAll() {
+        allQuestions.forEach(q => q.reset());
+        const scoreSpan = document.getElementById('globalScoreDisplay');
+        scoreSpan.innerHTML = `⭐ Результат: 0 / ${allQuestions.length}`;
+        scoreSpan.style.background = "#eef2ff";
+    }
+
+    // инициализация
+    buildExercises();
+    document.getElementById('checkAllBtn').addEventListener('click', checkAll);
+    document.getElementById('resetAllBtn').addEventListener('click', resetAll);
+    // начальный счетчик
+    document.getElementById('globalScoreDisplay').innerHTML = `⭐ Результат: 0 / ${allQuestions.length}`;
+</script>
+</body>
+</html>
